@@ -34,6 +34,10 @@ log(price_indirect) = a1 log(DirectPrice_avg)
 
 `DirectPrice_avg` is the mean direct fare on the same route and departure date and day. `SoldOutDummy` is 1 once the number of direct flights on a route-date falls below its initial count. Details are in [docs/method.md](docs/method.md).
 
+## Read this first
+
+**[docs/FINDINGS.md](docs/FINDINGS.md)** is the full write-up: for each of the 4 core experiments, 7 extra questions and 6 robustness checks it gives the hypothesis, what was done, what was found, and a figure. It also lists what not to over-trust.
+
 ## Main results
 
 From [results/results_merged.csv](results/results_merged.csv) (`***` p<0.01, `**` p<0.05, `*` p<0.1, blank = not significant):
@@ -49,13 +53,13 @@ From [results/results_merged.csv](results/results_merged.csv) (`***` p<0.01, `**
 
 - **Substitution holds in both years.** A 10% rise in the direct fare goes with a 2.6-3.4% rise in the indirect fare.
 - **The link weakens as departure nears** (a2 < 0 in both years).
-- **Sell-outs raise indirect fares.** The event study shows a jump of roughly 10-11% on the day direct flights first disappear, with no jump in the control group (routes where directs never sell out).
+- **Sell-outs raise indirect fares.** In 2023 the event study shows a jump of about 11% on the day a direct flight first disappears, with a flat control group. In 2026 the pattern is much less clean (fares were already rising and the control rises too).
 - **The travel-time discount** is U-shaped in 2023 and not detectable in 2026.
 - **Price response is asymmetric** in 2023 (indirects follow directs up, not down); in 2026 they also follow downward moves, at roughly half the strength.
 
-![coefficients](figures/summary/01_coefficients.png)
-![booking horizon](figures/summary/02_booking_horizon.png)
-![event study](figures/merged/03_event_study_merged.png)
+![main coefficients](figures/clean/01_main_coefficients.png)
+![substitution over the booking window](figures/clean/02_substitution_over_time.png)
+![event study](figures/clean/03_event_study.png)
 
 ## Robustness
 
@@ -77,9 +81,12 @@ src/
   run_2026_analyses.py    everything above on the 2026 data
   run_merged_analyses.py  pooled 2023+2026 analysis with year effect
   summary_plots.py        summary figures from the results CSVs
+  make_figures.py         clean write-up figures (results CSVs + a few typed-in numbers)
 results/                  coefficient tables and event-study outputs
-figures/                  2023/, 2026/, merged/, summary/
-docs/                     method, data overview, 2026 cleaning log, full experiment write-up
+figures/clean/            the figures used in the write-up (regenerate with src/make_figures.py)
+figures/                  2023/, 2026/, merged/, summary/: original script outputs, less polished
+docs/FINDINGS.md          readable write-up of every question
+docs/                     method, data overview, 2026 cleaning log, raw experiment log
 data/sample/              schema examples
 ```
 
@@ -100,3 +107,4 @@ Several analysis scripts read their input files from the working directory (`fin
 - 2026 raw data needed cleaning before use (price fields that captured schedule text, encoding of the euro sign, routes with no direct service); see [docs/data_cleaning_2026.md](docs/data_cleaning_2026.md).
 - Results are for peak spring travel on European short-haul routes and may not carry over to other seasons.
 - Observational data: the event study and placebo test support a causal reading of the sell-out effect, but common demand shocks are not fully ruled out.
+- The quantile-regression question (cheap vs expensive tickets) is not answered: the output is implausibly identical across quantiles. See the caveats section of the findings.
