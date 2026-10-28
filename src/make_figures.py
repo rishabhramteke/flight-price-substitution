@@ -5,7 +5,7 @@ Clean, self-explanatory figures for the write-up (docs/FINDINGS.md).
 
 Inputs
   results/*.csv            coefficient tables and event-study series (in this repo)
-  final_merged.csv         optional, only for the three descriptive figures (D1-D3)
+  data/final_*.csv.gz      regression-ready data, only for the three descriptive figures (D1-D3)
 
 Numbers that exist only in docs/experiments.md (Q1-Q7, T1-T6) are typed in the
 NUMBERS block below, each with the section it was copied from.
@@ -309,9 +309,10 @@ finish(fig, "15_year_effect", "After controlling for everything in the model, 20
 # ----------------------------------------------------------------------------
 # Descriptive figures from the regression-ready data (optional file)
 # ----------------------------------------------------------------------------
-DATA = "final_merged.csv"
-if os.path.exists(DATA):
-    df = pd.read_csv(DATA, usecols=["Year", "price", "DirectPrice_avg", "TravelTimeMinutes", "DaysBeforeDeparture", "SoldOutDummy"])
+COLS = ["Year", "price", "DirectPrice_avg", "TravelTimeMinutes", "DaysBeforeDeparture", "SoldOutDummy"]
+DATA_FILES = ["data/final_2023.csv.gz", "data/final_2026.csv.gz"]
+if all(os.path.exists(f) for f in DATA_FILES):
+    df = pd.concat([pd.read_csv(f, usecols=COLS) for f in DATA_FILES], ignore_index=True)
     # D1 share of indirect observations where a direct has sold out, by days before departure
     fig, ax = plt.subplots(figsize=(9, 4.6))
     for yr, col in [(2023, C23), (2026, C26)]:
@@ -341,4 +342,4 @@ if os.path.exists(DATA):
     ax.set_xticks(x); ax.set_xticklabels(["Indirect fare", "Average direct fare\non the same route-date"]); ax.set_ylabel("Median (EUR)"); ax.legend(title="Year")
     finish(fig, "D3_median_fares", "Fares are higher in 2026 for both types of flight", "Medians over the regression sample.")
 else:
-    print(f"{DATA} not found: skipped descriptive figures D1-D3")
+    print("data/final_*.csv.gz not found: skipped descriptive figures D1-D3")

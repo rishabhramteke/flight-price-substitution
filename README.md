@@ -18,7 +18,14 @@ Airlines reprice seats continuously as departure approaches. Direct flights are 
 | Booking horizon | 1-36 days before departure | 0-36 days before departure |
 | Regression-ready rows (indirect) | 172,591 (128 routes) | 687,256 (121 routes) |
 
-Raw data is not included in this repo (size, and the 2023 panel is not mine to redistribute). `data/sample/` holds tiny files that show the expected schemas.
+The regression-ready data for both years is in `data/` as gzipped CSVs (about 21 MB together):
+
+| File | Rows | Contents |
+|---|---|---|
+| `data/final_2023.csv.gz` | 172,591 | indirect itineraries with direct-fare benchmark, sell-out flags and log terms |
+| `data/final_2026.csv.gz` | 687,256 | same columns, 2026 |
+
+The raw scrapes are not included. `data/sample/` holds tiny files that show the raw schemas. The 2023 panel is a reference dataset that I did not collect; the 2026 fares were scraped from a consumer booking site. Both are shared here for reproducing this analysis only.
 
 ## Model
 
@@ -94,13 +101,12 @@ data/sample/              schema examples
 
 ```bash
 pip install -r requirements.txt
-# put the raw files in data/ (paths are set at the top of each script), then from the repo root:
-python src/preprocess.py --dataset merged
-python src/regression.py --dataset merged
-python src/summary_plots.py
+python src/make_figures.py        # redraws figures/clean from results/ and data/*.gz
+gunzip -k data/*.gz              # only needed for the analysis scripts below
+# the analysis scripts read final_2023.csv / final_2026_fixed.csv from the working directory
 ```
 
-Several analysis scripts read their input files from the working directory (`final_2023.csv`, `final_2026_fixed.csv`, `AMD.csv`); the constants at the top of each script say which.
+The cleaning step (`preprocess.py`, `merge_scrapes.py`) needs the raw scrapes, which are not in the repo; the analysis scripts start from the regression-ready files above. Constants at the top of each script say which file it reads (some also expect the raw 2023 file for route-level fields, which is not included).
 
 ## Notes
 
