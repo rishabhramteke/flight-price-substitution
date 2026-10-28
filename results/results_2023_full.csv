@@ -1,0 +1,6 @@
+variable,label,coef,std_err,t_stat,p_value,sig,n_obs,r2,dataset,window
+log_DirectPrice_avg,α1  log(DirectPrice_avg),0.342092,0.021602,15.8359,0.0,***,172591,0.534171,2023,full
+log_DirectPrice_x_Days,α2  log(DirectPrice_avg) × DaysBeforeDeparture,-0.001441,0.000139,-10.3794,0.0,***,172591,0.534171,2023,full
+log_TravelTime,α3  log(TravelTime),-0.810618,0.236855,-3.4224,0.000621,***,172591,0.534171,2023,full
+log_TravelTime_sq,α4  log(TravelTime)²,0.044603,0.019079,2.3378,0.019398,**,172591,0.534171,2023,full
+SoldOutDummy,α5  SoldOutDummy,0.048375,0.01696,2.8523,0.00434,***,172591,0.534171,2023,full

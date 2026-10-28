@@ -1,0 +1,9 @@
+variable,label,coef,std_err,t_stat,p_value,sig,n_obs,r2
+log_DirectPrice_avg,α1  log(DirectPrice_avg)  [non-LCC baseline],0.32374,0.021914,14.7734,0.0,***,172591,0.571846
+log_DirectPrice_x_Days,α2  log(DirectPrice_avg) × Days,-0.001466,0.000135,-10.8852,0.0,***,172591,0.571846
+log_TravelTime,α3  log(TravelTime),-0.514,0.230882,-2.2262,0.025998,**,172591,0.571846
+log_TravelTime_sq,α4  log(TravelTime)²,0.023999,0.018468,1.2995,0.193786,,172591,0.571846
+SoldOutDummy,α5  SoldOutDummy           [non-LCC baseline],0.034392,0.015779,2.1796,0.029289,**,172591,0.571846
+lccdum,β1  LCCdum (level effect),-0.611826,0.219935,-2.7819,0.005405,***,172591,0.571846
+lccdum:log_DirectPrice_avg,lccdum:log_DirectPrice_avg,0.046676,0.037915,1.2311,0.2183,,172591,0.571846
+lccdum:SoldOutDummy,lccdum:SoldOutDummy,0.058153,0.04792,1.2135,0.224929,,172591,0.571846

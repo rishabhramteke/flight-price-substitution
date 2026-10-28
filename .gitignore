@@ -1,0 +1,7 @@
+.DS_Store
+__pycache__/
+data/*.csv
+!data/sample/*.csv
+final_*.csv
+merged_output_*.csv
+flights_output_*.csv
